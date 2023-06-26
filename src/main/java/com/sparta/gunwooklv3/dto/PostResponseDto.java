@@ -24,9 +24,9 @@ public class PostResponseDto {
         this.username = post.getUsername(); // post에서 유저이름 추출하여 대입
         this.createAt = post.getCreatedAt(); // post에서 생성시간 추출하여 대입
         this.modifiedAt = post.getModifiedAt(); // post에서 수정시간 추출하여 대입
-        this.commentList = post.getComment()
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+        this.commentList = post.getComment() // 댓글목록을 가져온다.
+                .stream() // 댓글목록을 스트림으로 변환한다.
+                .map(CommentResponseDto::new) // 각 요소를 CommentResponseDto로 변환한다.
+                .collect(Collectors.toList()); // 요소들을 List로 변환후 저장한다.
     }
 }

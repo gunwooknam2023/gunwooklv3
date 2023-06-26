@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
-    private Long id;
-    private String comment;
-    private String username;
-    private LocalDateTime createAt;
-    private LocalDateTime modifiedAt;
+    private Long id; // 댓글번호
+    private String comment; // 댓글내용
+    private String username; // 유저이름
+    private LocalDateTime createAt; //생성시간
+    private LocalDateTime modifiedAt; // 수정시간
 
     public CommentResponseDto(Comment comment){
-        this.id = comment.getId();
-        this.comment = comment.getComment();
-        this.username = comment.getComment();
-        this.createAt = comment.getCreatedAt();
-        this.modifiedAt = comment.getModifiedAt();
+        this.id = comment.getId(); // 받아온값을 주입
+        this.comment = comment.getComment(); // 받아온값을 주입
+        this.username = comment.getComment(); // 받아온값을 주입
+        this.createAt = comment.getCreatedAt(); // 받아온값을 주입
+        this.modifiedAt = comment.getModifiedAt(); // 받아온값을 주입
     }
 
 }

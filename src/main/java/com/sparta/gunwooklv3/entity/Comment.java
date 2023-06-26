@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 댓글번호
 
     @Column(nullable = false)
-    private String comment;
+    private String comment; // 댓글내용
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
@@ -29,13 +29,13 @@ public class Comment extends Timestamped {
     private User user;
 
     public Comment(User user, CommentRequestDto commentRequestDto, Post post){
-        this.post = post;
-        this.user = user;
-        this.comment = commentRequestDto.getComment();
+        this.post = post; // 가져온 정보를 주입
+        this.user = user; // 가져온 정보를 주입
+        this.comment = commentRequestDto.getComment(); // 가져온 정보를 주입
     }
 
     public void update(CommentRequestDto commentRequestDto){
-        this.comment = commentRequestDto.getComment();
+        this.comment = commentRequestDto.getComment(); // 가져온 정보를 주입
     }
 
 }

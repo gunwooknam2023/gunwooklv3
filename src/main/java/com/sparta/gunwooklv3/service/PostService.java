@@ -80,14 +80,14 @@ public class PostService {
         );
 
         if(user == null){ // 인증되지 않는 사용자일때
-            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다."); // 예외처리를 throw 한다.
         }
 
-
+        // 게시글작성자와 유저의 작성자가 일치하는지, 권한이 admin인지 확인후 둘중 하나라도 만족시 실행한다.
         if(post.getUser().equals(user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
-            post.update(requestDto);
+            post.update(requestDto); // 게시글내용을 업데이트한다.
         } else {
-            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다."); // 조건 미달시 예외처리를 throw
         }
         return new PostResponseDto(post); // 업데이트된 게시물을 PostResponseDto형태로 변환하여 반환한다.
     }
@@ -107,13 +107,14 @@ public class PostService {
             return new StatusResult("작성자만 삭제할 수 있습니다.", 400);
         }
 
+        // 게시글작성자와 유저의 작성자가 일치하는지, 권한이 admin인지 확인후 둘중 하나라도 만족시 실행한다.
         if(post.getUser().equals(user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
-            postRepository.delete(post);
+            postRepository.delete(post); // 게시글을 삭제한다.
         } else {
-            return new StatusResult("작성자만 삭제하 수 있습니다.", 400);
+            return new StatusResult("작성자만 삭제하 수 있습니다.", 400); // 예외처리 throw
         }
 
-        return new StatusResult("삭제 성공",200);
+        return new StatusResult("삭제 성공",200); // 게시글 삭제시 메시지와 200코드를 출력한다.
     }
 
 
@@ -137,7 +138,7 @@ public class PostService {
 
             // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다")
+                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다") // 예외처리를 throw
             );
             return user;
 

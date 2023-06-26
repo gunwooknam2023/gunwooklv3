@@ -37,15 +37,15 @@ public class Post extends Timestamped { // 타임스태프를 상속하여 사�
     private List<Comment> comment = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, User user){
-        this.title = requestDto.getTitle();
-        this.contents = requestDto.getContents();
-        this.user = user;
-        this.username = user.getUsername();
+        this.title = requestDto.getTitle(); // 가져온 정보를 주입
+        this.contents = requestDto.getContents(); // 가져온 정보를 주입
+        this.user = user; // 가져온 정보를 주입
+        this.username = user.getUsername(); // 가져온 정보를 주입
     }
 
     public void update(PostRequestDto requestDto){
-        this.title = requestDto.getTitle();
-        this.contents = requestDto.getContents();
+        this.title = requestDto.getTitle(); // 가져온 정보를 주입
+        this.contents = requestDto.getContents(); // 가져온 정보를 주입
     }
 
 
