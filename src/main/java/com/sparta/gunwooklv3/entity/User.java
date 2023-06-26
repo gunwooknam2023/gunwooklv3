@@ -20,8 +20,13 @@ public class User {
     @Column(nullable = false)
     private String password; // 비밀번호
 
-    public User(String username, String password){
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
+    public User(String username, String password, UserRoleEnum role){
         this.username = username; // 유저이름 대입
         this.password = password; // 비밀번호 대입
+        this.role = role;
     }
 }
