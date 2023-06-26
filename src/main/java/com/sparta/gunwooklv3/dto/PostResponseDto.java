@@ -4,6 +4,8 @@ import com.sparta.gunwooklv3.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class PostResponseDto {
@@ -13,6 +15,7 @@ public class PostResponseDto {
     private String username; // 유저이름
     private LocalDateTime createAt; // 생성된 시간
     private LocalDateTime modifiedAt; // 수정된 시간
+    private List<CommentResponseDto> commentList;
 
     public PostResponseDto(Post post){
         this.id = post.getId(); // post에서 id 추출하여 대입
@@ -21,5 +24,9 @@ public class PostResponseDto {
         this.username = post.getUsername(); // post에서 유저이름 추출하여 대입
         this.createAt = post.getCreatedAt(); // post에서 생성시간 추출하여 대입
         this.modifiedAt = post.getModifiedAt(); // post에서 수정시간 추출하여 대입
+        this.commentList = post.getComment()
+                .stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

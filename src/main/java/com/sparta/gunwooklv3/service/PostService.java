@@ -2,8 +2,10 @@ package com.sparta.gunwooklv3.service;
 
 import com.sparta.gunwooklv3.dto.PostRequestDto;
 import com.sparta.gunwooklv3.dto.PostResponseDto;
+import com.sparta.gunwooklv3.dto.StatusResult;
 import com.sparta.gunwooklv3.entity.Post;
 import com.sparta.gunwooklv3.entity.User;
+import com.sparta.gunwooklv3.entity.UserRoleEnum;
 import com.sparta.gunwooklv3.jwt.JwtUtil;
 import com.sparta.gunwooklv3.repository.PostRepository;
 import com.sparta.gunwooklv3.repository.UserRepository;
@@ -73,40 +75,45 @@ public class PostService {
         // 토큰 체크
         User user = checkToken(request); // request안에 담긴 JWT토큰을 가져온다.
 
-        if(user == null){ // 인증되지 않는 사용자일때
-            throw new IllegalArgumentException("인증되지 않은 사용자입니다."); // 예외처리를 throw한다.
-        }
-
         Post post = postRepository.findById(id).orElseThrow( // id에맞는 게시물을 post에 입력받는다.
                 () -> new NullPointerException("해당 글이 존재하지 않습니다.") // 존재하지않으면 예외처리를 throw한다.
         );
 
-        if(!post.getUser().equals(user)){ // post에 담긴 user와 받아온 user정보가 일치하는지 확인한다.
-            throw new IllegalArgumentException("글 작성자가 아닙니다."); // 일치하지않으면 예외처리를 throw 한다.
+        if(user == null){ // 인증되지 않는 사용자일때
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
 
-        post.update(requestDto); // 게시글접오를 받아온 requestDto로 업데이트 한다.
+
+        if(post.getUser().equals(user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
+            post.update(requestDto);
+        } else {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
         return new PostResponseDto(post); // 업데이트된 게시물을 PostResponseDto형태로 변환하여 반환한다.
     }
 
     @Transactional
     // 선택한 게시글 삭제 API
-    public void deletePost(Long id, HttpServletRequest request) {
+    public StatusResult deletePost(Long id, HttpServletRequest request) {
 
         // 토큰 체크
         User user = checkToken(request); // 받아온 request에서 jwt정보를 추출한다.
-
-        if(user == null){ // 인증값이 없을시.
-            throw new IllegalArgumentException("인증되지 않은 사용자입니다."); // 예외처리 throw
-        }
 
         Post post = postRepository.findById(id).orElseThrow( // id에 대한 글이 없을시.
                 () -> new NullPointerException("해당 글이 존재하지 않습니다.") // 예외처리 throw
         );
 
-        if(post.getUser().equals(user)){ // 게시글의 user정보와 요청한 user정보를 비교한다.
-            postRepository.delete(post); // 일치시 postRepository를 이용하여 post정보를 삭제한다.
+        if(user == null){ // 인증값이 없을시.
+            return new StatusResult("작성자만 삭제할 수 있습니다.", 400);
         }
+
+        if(post.getUser().equals(user) || user.getRole().equals(UserRoleEnum.ADMIN)) {
+            postRepository.delete(post);
+        } else {
+            return new StatusResult("작성자만 삭제하 수 있습니다.", 400);
+        }
+
+        return new StatusResult("삭제 성공",200);
     }
 
 

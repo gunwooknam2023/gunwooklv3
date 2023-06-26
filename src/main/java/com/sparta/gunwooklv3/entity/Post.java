@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -29,6 +32,9 @@ public class Post extends Timestamped { // 타임스태프를 상속하여 사�
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = true, updatable = true)
 
     private User user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Comment> comment = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, User user){
         this.title = requestDto.getTitle();
